@@ -1,5 +1,4 @@
-// Canvas → Airtable Learner-Ops Sync
-// All secrets live in Script Properties — never hardcoded.
+
 
 const P = PropertiesService.getScriptProperties();
 const CFG = {
@@ -30,7 +29,6 @@ function syncLearners() {
     });
     upsertAirtable_('Learners', records, ['Canvas User ID']);
 
-    // Cohorts — derived from the same payload, deduped by course name
     const cohorts = {};
     enrollments.forEach(function (e) {
       if (e.course_name && !cohorts[e.course_name]) {
@@ -51,7 +49,6 @@ function syncLearners() {
   }
 }
 
-// ---- Canvas side: one seam, two implementations ----
 
 function getEnrollments_() {
   if (String(CFG.canvasMode).toLowerCase() === 'live') {
@@ -65,7 +62,6 @@ function getEnrollments_() {
 
 function mockEnrollments_() {
   // Shaped exactly like Canvas's documented enrollments response:
-  // canvas.instructure.com/doc/api/enrollments.html
   var names = ['Ava Brooks', 'Marcus Lee', 'Priya Natarajan',
                'Diego Ramos', 'Tasha Wright', 'Sam Okafor'];
   var scores = [92, 67, 81, 54, 88, 73];
@@ -94,7 +90,7 @@ function canvasGet_(path) {
   return JSON.parse(res.getContentText());
 }
 
-// ---- Airtable side ----
+//Airtable
 
 function upsertAirtable_(table, records, mergeOn) {
   for (var i = 0; i < records.length; i += 10) { // Airtable: max 10/request
